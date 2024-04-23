@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { initialForm, initialError } from "./constant";
-//import { validateForm } from "./helper";
 import { allFieldsAreEmpty, validateForm } from "../../../shared/helper";
 import Field from "../../organisms/field";
+import { signUpUser } from "../../../shared/fetch";
 
 const SignUp = () => {
   const [signUpForm, setSignUpForm] = useState(initialForm);
   const [errorForm, setErrorForm] = useState(initialError);
+  const [message, setMessage] = useState("");
 
   const handleUsernameChange = (username: string) => {
     setSignUpForm({
@@ -27,14 +28,27 @@ const SignUp = () => {
     });
   };
   //@ts-ignore
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errorFields = validateForm(signUpForm, initialError);
     if (!allFieldsAreEmpty(errorFields)) {
       // @ts-ignore
       setErrorForm(errorFields);
     } else {
-      setErrorForm(initialError);
+      const res = await signUpUser({
+        username: signUpForm.username,
+        password: signUpForm.password,
+      });
+      if (res.error) {
+        setErrorForm({
+          ...initialError,
+          usernameError: res.error,
+        });
+      }
+      if (res.message) {
+        setMessage(res.message);
+        setErrorForm(initialError);
+      }
       // send a post request to server and validate if the username already exists
       // if it exists return an error and display error
       //else display a message saying user successfully registered
@@ -68,6 +82,7 @@ const SignUp = () => {
         error={errorForm.confirmPasswordError}
       />
       <button onClick={handleSubmit}>Submit</button>
+      {message && <div>{message}</div>}
     </form>
   );
 };
