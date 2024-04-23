@@ -1,4 +1,4 @@
-import { IInputError, IInput } from "../../../shared/types";
+import { IInput, IInputError } from "./types";
 
 export const allFieldsAreEmpty = (
   inputFields: IInput | IInputError

@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { initialForm, initialError } from "./constant";
-//import { validateForm } from "./helper";
-import { allFieldsAreEmpty, validateForm } from "../../../shared/helper";
 import Field from "../../organisms/field";
+import { initialError, initialForm } from "./constants";
+import { allFieldsAreEmpty, validateForm } from "../../../shared/helper";
 
-const SignUp = () => {
+const SignIn = () => {
   const [signUpForm, setSignUpForm] = useState(initialForm);
   const [errorForm, setErrorForm] = useState(initialError);
 
@@ -20,12 +19,6 @@ const SignUp = () => {
       password,
     });
   };
-  const handleConfirmPasswordChange = (confirmPassword: string) => {
-    setSignUpForm({
-      ...signUpForm,
-      confirmPassword,
-    });
-  };
   //@ts-ignore
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,9 +28,10 @@ const SignUp = () => {
       setErrorForm(errorFields);
     } else {
       setErrorForm(initialError);
-      // send a post request to server and validate if the username already exists
-      // if it exists return an error and display error
-      //else display a message saying user successfully registered
+      // start authentication. If user doesn't exist then return error message
+      // telling user do not exist
+      // else send success message telling user successfully authenticated,
+      // plus send access token and refresh token.
     }
   };
 
@@ -59,17 +53,8 @@ const SignUp = () => {
         value={signUpForm.password}
         error={errorForm.passwordError}
       />
-      <Field
-        labelName="Confirm password"
-        type="password"
-        placeholder="Confirm password"
-        onChange={handleConfirmPasswordChange}
-        value={signUpForm.confirmPassword}
-        error={errorForm.confirmPasswordError}
-      />
       <button onClick={handleSubmit}>Submit</button>
     </form>
   );
 };
-
-export default SignUp;
+export default SignIn;
