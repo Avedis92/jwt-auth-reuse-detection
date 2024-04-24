@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Field from "../../organisms/field";
 import { initialError, initialForm } from "./constants";
 import { allFieldsAreEmpty, validateForm } from "../../../shared/helper";
@@ -8,6 +9,7 @@ const SignIn = () => {
   const [signInForm, setSignInForm] = useState(initialForm);
   const [errorForm, setErrorForm] = useState(initialError);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleUsernameChange = (username: string) => {
     setSignInForm({
@@ -25,8 +27,6 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errorFields = validateForm(signInForm, initialError);
-    console.log(errorFields);
-    console.log(allFieldsAreEmpty(errorFields));
     if (!allFieldsAreEmpty(errorFields)) {
       // @ts-ignore
       setErrorForm(errorFields);
@@ -44,11 +44,17 @@ const SignIn = () => {
         if (result.message) {
           setMessage(result.message);
           localStorage.setItem("accessToken", result.accessToken!);
+          // this is just to use username instead of using state management
+          localStorage.setItem("username", signInForm.username);
         }
       } finally {
         setErrorForm(initialError);
       }
     }
+  };
+
+  const handleSignOut = () => {
+    navigate("/signOut");
   };
 
   return (
@@ -72,7 +78,13 @@ const SignIn = () => {
         />
         <button onClick={handleSubmit}>Submit</button>
       </form>
-      {message && <div>{message}</div>}
+      {message && (
+        <div>
+          <h2>{message}</h2>
+          <button>Go to auhorized content</button>
+          <button onClick={handleSignOut}>Sign out</button>
+        </div>
+      )}
     </div>
   );
 };

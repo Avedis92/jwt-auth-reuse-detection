@@ -23,3 +23,16 @@ export const signInUser = (userInfo: IInput): Promise<ISignIn> => {
     (res) => res.json()
   );
 };
+
+export const signOutUser = (
+  userInfo: Record<string, string>
+): Promise<ISignUp> => {
+  const requestData: IRequestData = {
+    endpoints: endpoints.signOut,
+    method: "POST",
+    body: JSON.stringify(userInfo),
+  };
+  return fetch(processUrl(requestData), processOptions(requestData)).then(
+    (res) => res.json()
+  );
+};
