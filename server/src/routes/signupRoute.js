@@ -1,11 +1,8 @@
 import { Router } from "express";
-import bodyParser from "body-parser";
 import { verifyUsernameExists } from "../middlewares/verifyUsernameExists.js";
 import { signUpService } from "../services/signUpService.js";
 
 const signUpRoute = Router();
-
-signUpRoute.use(bodyParser.json());
 
 signUpRoute.post("/", verifyUsernameExists, async (req, res) => {
   const { username, password } = req.body;

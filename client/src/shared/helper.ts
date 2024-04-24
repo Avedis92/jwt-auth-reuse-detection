@@ -17,7 +17,10 @@ export const validateForm = (
   if (!inputForm.password) {
     errorInputFields.passwordError = "Password is required";
   }
-  if (inputForm.password !== inputForm.confirmPassword) {
+  if (
+    inputForm.confirmPassword &&
+    inputForm.password !== inputForm.confirmPassword
+  ) {
     errorInputFields.confirmPasswordError =
       "The content does not match the password";
   }

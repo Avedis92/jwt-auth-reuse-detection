@@ -29,3 +29,7 @@ export interface ISignUp {
   error?: string;
   message?: string;
 }
+
+export interface ISignIn extends ISignUp {
+  accessToken?: string;
+}
