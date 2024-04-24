@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { initialForm, initialError } from "./constant";
 import { allFieldsAreEmpty, validateForm } from "../../../shared/helper";
 import Field from "../../organisms/field";
@@ -8,6 +9,7 @@ const SignUp = () => {
   const [signUpForm, setSignUpForm] = useState(initialForm);
   const [errorForm, setErrorForm] = useState(initialError);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleUsernameChange = (username: string) => {
     setSignUpForm({
@@ -55,6 +57,10 @@ const SignUp = () => {
     }
   };
 
+  const navigateToSignIn = () => {
+    navigate("signIn");
+  };
+
   return (
     <form>
       <Field
@@ -82,7 +88,12 @@ const SignUp = () => {
         error={errorForm.confirmPasswordError}
       />
       <button onClick={handleSubmit}>Submit</button>
-      {message && <div>{message}</div>}
+      {message && (
+        <div>
+          <p>{message}</p>
+          <button onClick={navigateToSignIn}>Go to signIn</button>
+        </div>
+      )}
     </form>
   );
 };
