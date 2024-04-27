@@ -14,7 +14,7 @@ signInRoute.post("/", authenticateUser, async (req, res) => {
   const accessToken = jwt.sign(
     { data: username },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15s" }
+    { expiresIn: "5m" }
   );
   const refreshToken = jwt.sign(
     { data: username },
