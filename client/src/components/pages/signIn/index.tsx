@@ -4,6 +4,7 @@ import Field from "../../organisms/field";
 import { initialError, initialForm } from "./constants";
 import { allFieldsAreEmpty, validateForm } from "../../../shared/helper";
 import { signInUser } from "../../../shared/fetch";
+import styles from "./style.module.css";
 
 const SignIn = () => {
   const [signInForm, setSignInForm] = useState(initialForm);
@@ -11,6 +12,7 @@ const SignIn = () => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const { container, messageContainer, submitButton } = styles;
 
   const handleUsernameChange = (username: string) => {
     setSignInForm({
@@ -27,7 +29,7 @@ const SignIn = () => {
   //@ts-ignore
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const errorFields = validateForm(signInForm, initialError);
+    const errorFields = validateForm(signInForm, initialError, false);
     if (!allFieldsAreEmpty(errorFields)) {
       // @ts-ignore
       setErrorForm(errorFields);
@@ -64,10 +66,10 @@ const SignIn = () => {
   };
 
   return (
-    <div>
+    <div className={container}>
       <form>
         <Field
-          labelName="username"
+          labelName="Username"
           type="text"
           placeholder="Enter username"
           onChange={handleUsernameChange}
@@ -75,25 +77,27 @@ const SignIn = () => {
           error={errorForm.usernameError}
         />
         <Field
-          labelName="password"
+          labelName="Password"
           type="password"
           placeholder="Enter password"
           onChange={handlePasswordChange}
           value={signInForm.password}
           error={errorForm.passwordError}
         />
-        <button onClick={handleSubmit}>Submit</button>
+        <button className={submitButton} onClick={handleSubmit}>
+          Sign In
+        </button>
       </form>
       {message && (
-        <div>
-          <h2>{message}</h2>
+        <div className={messageContainer}>
+          <p>{message}</p>
           <button onClick={navigateToPostPage}>Go to post</button>
           <button onClick={handleSignOut}>Sign out</button>
         </div>
       )}
       {errorMessage && (
-        <div>
-          <h1>{errorMessage}</h1>
+        <div className={messageContainer}>
+          <p>{errorMessage}</p>
         </div>
       )}
     </div>

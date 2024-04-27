@@ -4,12 +4,14 @@ import { initialForm, initialError } from "./constant";
 import { allFieldsAreEmpty, validateForm } from "../../../shared/helper";
 import Field from "../../organisms/field";
 import { signUpUser } from "../../../shared/fetch";
+import styles from "./style.module.css";
 
 const SignUp = () => {
   const [signUpForm, setSignUpForm] = useState(initialForm);
   const [errorForm, setErrorForm] = useState(initialError);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const { container, submitButton, messageContainer } = styles;
 
   const handleUsernameChange = (username: string) => {
     setSignUpForm({
@@ -32,7 +34,7 @@ const SignUp = () => {
   //@ts-ignore
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const errorFields = validateForm(signUpForm, initialError);
+    const errorFields = validateForm(signUpForm, initialError, true);
     if (!allFieldsAreEmpty(errorFields)) {
       // @ts-ignore
       setErrorForm(errorFields);
@@ -62,39 +64,43 @@ const SignUp = () => {
   };
 
   return (
-    <form>
-      <Field
-        labelName="username"
-        type="text"
-        placeholder="Enter username"
-        onChange={handleUsernameChange}
-        value={signUpForm.username}
-        error={errorForm.usernameError}
-      />
-      <Field
-        labelName="password"
-        type="password"
-        placeholder="Enter password"
-        onChange={handlePasswordChange}
-        value={signUpForm.password}
-        error={errorForm.passwordError}
-      />
-      <Field
-        labelName="Confirm password"
-        type="password"
-        placeholder="Confirm password"
-        onChange={handleConfirmPasswordChange}
-        value={signUpForm.confirmPassword}
-        error={errorForm.confirmPasswordError}
-      />
-      <button onClick={handleSubmit}>Submit</button>
+    <div className={container}>
+      <form>
+        <Field
+          labelName="Username"
+          type="text"
+          placeholder="Enter username"
+          onChange={handleUsernameChange}
+          value={signUpForm.username}
+          error={errorForm.usernameError}
+        />
+        <Field
+          labelName="Password"
+          type="password"
+          placeholder="Enter password"
+          onChange={handlePasswordChange}
+          value={signUpForm.password}
+          error={errorForm.passwordError}
+        />
+        <Field
+          labelName="Confirm password"
+          type="password"
+          placeholder="Confirm password"
+          onChange={handleConfirmPasswordChange}
+          value={signUpForm.confirmPassword}
+          error={errorForm.confirmPasswordError}
+        />
+        <button className={submitButton} onClick={handleSubmit}>
+          Sign Up
+        </button>
+      </form>
       {message && (
-        <div>
+        <div className={messageContainer}>
           <p>{message}</p>
           <button onClick={navigateToSignIn}>Go to signIn</button>
         </div>
       )}
-    </form>
+    </div>
   );
 };
 

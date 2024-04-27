@@ -8,7 +8,8 @@ export const allFieldsAreEmpty = (
 
 export const validateForm = (
   inputForm: IInput,
-  initialInputErrors: IInputError
+  initialInputErrors: IInputError,
+  isSignUpForm: boolean
 ): IInputError => {
   const errorInputFields = { ...initialInputErrors };
   if (!inputForm.username) {
@@ -18,8 +19,9 @@ export const validateForm = (
     errorInputFields.passwordError = "Password is required";
   }
   if (
-    inputForm.confirmPassword &&
-    inputForm.password !== inputForm.confirmPassword
+    isSignUpForm &&
+    (inputForm.password !== inputForm.confirmPassword ||
+      !inputForm.confirmPassword)
   ) {
     errorInputFields.confirmPasswordError =
       "The content does not match the password";

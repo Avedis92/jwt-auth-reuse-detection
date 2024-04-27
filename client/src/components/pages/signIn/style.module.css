@@ -1,0 +1,42 @@
+.container > form {
+  background-color: #0f6cbd;
+  border-radius: 1rem;
+  padding: 1rem 0 1rem 0.75rem;
+}
+.messageContainer {
+  background-color: #0f6cbd;
+  border-radius: 1rem;
+  padding: 1rem 0 1rem 0.75rem;
+  margin-top: 2rem;
+}
+.messageContainer > p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffff;
+}
+.submitButton,
+.messageContainer > button {
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #f7630c;
+  color: #ffff;
+  font-weight: bold;
+  font-size: 1.25rem;
+  width: fit-content;
+  padding: 1rem 0.75rem;
+  cursor: pointer;
+  transition: scale 0.3s ease-in-out;
+}
+.messageContainer > button:first-of-type {
+  margin-right: 2rem;
+}
+
+.submitButton:hover,
+.messageContainer > button:hover {
+  scale: 1.1;
+}
+
+.submitButton:active,
+.messageContainer > button:active {
+  scale: 0.8;
+}

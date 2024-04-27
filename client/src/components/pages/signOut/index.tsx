@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { signOutUser } from "../../../shared/fetch";
+import styles from "./style.module.css";
 
 const SignOut = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("Wait until you sign out...");
+  const [showButton, setShowButton] = useState(false);
+  const { container } = styles;
 
-  const handlebackToSignIn = () => {
+  const handleBackToSignIn = () => {
     navigate("/signIn");
   };
 
@@ -17,6 +20,7 @@ const SignOut = () => {
       });
       if (result.message) {
         setMessage(result.message);
+        setShowButton(true);
         localStorage.removeItem("username");
         localStorage.removeItem("accessToken");
       }
@@ -24,9 +28,11 @@ const SignOut = () => {
   }, []);
 
   return (
-    <div>
-      <h1>{message}</h1>
-      <button onClick={handlebackToSignIn}>Go back to sign in page</button>
+    <div className={container}>
+      <p>{message}</p>
+      {showButton && (
+        <button onClick={handleBackToSignIn}>Go back to sign in page</button>
+      )}
     </div>
   );
 };

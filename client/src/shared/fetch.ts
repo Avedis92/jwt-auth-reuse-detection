@@ -37,9 +37,14 @@ export const signOutUser = (
   );
 };
 
-export const getPosts = (accessToken: string): Promise<IPosts> => {
+export const postPosts = (
+  accessToken: string,
+  post: string
+): Promise<IPosts> => {
   const requestData: IRequestData = {
     endpoints: endpoints.posts,
+    method: "POST",
+    body: JSON.stringify({ post }),
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
