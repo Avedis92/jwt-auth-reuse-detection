@@ -9,6 +9,7 @@ const SignIn = () => {
   const [signInForm, setSignInForm] = useState(initialForm);
   const [errorForm, setErrorForm] = useState(initialError);
   const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleUsernameChange = (username: string) => {
@@ -39,10 +40,12 @@ const SignIn = () => {
       try {
         const result = await signInUser(signInForm);
         if (result.error) {
-          setMessage(result.error);
+          setErrorMessage(result.error);
+          setMessage("");
         }
         if (result.message) {
           setMessage(result.message);
+          setErrorMessage("");
           localStorage.setItem("accessToken", result.accessToken!);
           // this is just to use username instead of using state management
           localStorage.setItem("username", signInForm.username);
@@ -55,6 +58,9 @@ const SignIn = () => {
 
   const handleSignOut = () => {
     navigate("/signOut");
+  };
+  const navigateToPostPage = () => {
+    navigate("/posts");
   };
 
   return (
@@ -81,8 +87,13 @@ const SignIn = () => {
       {message && (
         <div>
           <h2>{message}</h2>
-          <button>Go to auhorized content</button>
+          <button onClick={navigateToPostPage}>Go to post</button>
           <button onClick={handleSignOut}>Sign out</button>
+        </div>
+      )}
+      {errorMessage && (
+        <div>
+          <h1>{errorMessage}</h1>
         </div>
       )}
     </div>

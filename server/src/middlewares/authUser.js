@@ -6,7 +6,6 @@ export const authenticateUser = async (req, res, next) => {
     username,
     password
   );
-  console.log(foundUser);
   if (!foundUser) {
     return res.status(404).json({ error: "User not found" });
   }
