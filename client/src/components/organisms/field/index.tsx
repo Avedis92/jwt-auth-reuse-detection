@@ -1,5 +1,6 @@
 import React from "react";
 import { IFieldProps } from "./types";
+import styles from "./style.module.css";
 
 const Field = ({
   labelName,
@@ -12,9 +13,10 @@ const Field = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
+  const { fieldContainer, errorText } = styles;
   return (
-    <div>
-      <label htmlFor={labelName}>{labelName}</label>
+    <div className={fieldContainer}>
+      <label htmlFor={labelName}>{labelName}:</label>
       <input
         id={labelName}
         placeholder={placeholder}
@@ -22,7 +24,7 @@ const Field = ({
         onChange={handleChange}
         type={type}
       />
-      {error && <div>{error}</div>}
+      {error && <p className={errorText}>{error}</p>}
     </div>
   );
 };

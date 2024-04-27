@@ -1,11 +1,13 @@
 import { IPost } from "../../../shared/types";
+import styles from "./style.module.css";
 
 const Post = ({ username, post }: IPost) => {
+  const { container } = styles;
   return (
-    <div>
-      <h1>
+    <div className={container}>
+      <p>
         {username}: {post}
-      </h1>
+      </p>
     </div>
   );
 };

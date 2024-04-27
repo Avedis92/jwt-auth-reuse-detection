@@ -1,0 +1,28 @@
+.fieldContainer {
+  box-sizing: border-box;
+  margin-bottom: 2rem;
+  width: 30rem;
+}
+.fieldContainer > label {
+  display: block;
+  color: #ffff;
+  font-weight: bold;
+  font-size: 1.25rem;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.fieldContainer > input {
+  display: block;
+  text-align: left;
+  width: 70%;
+  height: 2rem;
+  font-size: 1.25rem;
+}
+
+.errorText {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f7630c;
+  text-align: left;
+}

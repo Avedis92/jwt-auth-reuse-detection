@@ -1,0 +1,42 @@
+.createPostContainer {
+  background-color: #0f6cbd;
+  border-radius: 1rem;
+  padding: 1rem 0 1rem 0.75rem;
+}
+
+.createPostContainer > button {
+  border: transparent;
+  border-radius: 0.5rem;
+  background-color: #f7630c;
+  color: #ffff;
+  font-weight: bold;
+  font-size: 1.25rem;
+  width: fit-content;
+  padding: 1rem 0.75rem;
+  cursor: pointer;
+  transition: scale 0.3s ease-in-out;
+}
+
+.createPostContainer > button:first-of-type {
+  margin-right: 2rem;
+}
+
+.createPostContainer > button:hover {
+  scale: 1.1;
+}
+
+.createPostContainer > button:active {
+  scale: 0.8;
+}
+.errorMessage {
+  color: #f7630c;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.postsContainer {
+  background-color: #0f6cbd;
+  border-radius: 1rem;
+  padding: 1rem 0 1rem 0.75rem;
+  margin-top: 2rem;
+}
