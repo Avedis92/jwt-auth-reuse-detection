@@ -5,7 +5,7 @@ class UserService {
     const { rows } = await query('SELECT * FROM "user" WHERE username=$1', [
       username,
     ]);
-    return rows;
+    return rows[0];
   }
   async getUserByUsernameAndPassword(username, password) {
     const { rows } = await query(
