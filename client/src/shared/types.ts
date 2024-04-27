@@ -33,3 +33,17 @@ export interface ISignUp {
 export interface ISignIn extends ISignUp {
   accessToken?: string;
 }
+
+export interface IPost {
+  username: string;
+  post: string;
+}
+
+export interface IInvalidToken {
+  error?: string;
+  type?: "invalid" | "expired";
+}
+
+export interface IPosts extends IInvalidToken {
+  posts?: IPost[];
+}

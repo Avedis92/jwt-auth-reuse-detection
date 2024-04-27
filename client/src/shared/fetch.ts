@@ -1,5 +1,5 @@
 import { endpoints } from "./endpoints";
-import { IInput, ISignUp, IRequestData, ISignIn } from "./types";
+import { IInput, ISignUp, IRequestData, ISignIn, IPosts } from "./types";
 import { processOptions, processUrl } from "./config";
 
 export const signUpUser = (userInfo: IInput): Promise<ISignUp> => {
@@ -31,6 +31,27 @@ export const signOutUser = (
     endpoints: endpoints.signOut,
     method: "POST",
     body: JSON.stringify(userInfo),
+  };
+  return fetch(processUrl(requestData), processOptions(requestData)).then(
+    (res) => res.json()
+  );
+};
+
+export const getPosts = (accessToken: string): Promise<IPosts> => {
+  const requestData: IRequestData = {
+    endpoints: endpoints.posts,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+  return fetch(processUrl(requestData), processOptions(requestData)).then(
+    (res) => res.json()
+  );
+};
+
+export const getNewTokens = (): Promise<{ accessToken: string }> => {
+  const requestData: IRequestData = {
+    endpoints: endpoints.refreshToken,
   };
   return fetch(processUrl(requestData), processOptions(requestData)).then(
     (res) => res.json()
