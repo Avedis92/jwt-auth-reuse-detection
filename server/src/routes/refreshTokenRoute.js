@@ -3,11 +3,12 @@ import jwt from "jsonwebtoken";
 import * as DotEnv from "dotenv";
 import { userService } from "../services/userService.js";
 import { signOutService } from "../services/signOutService.js";
+import { AppError } from "../shared/utils/error.js";
 
 const refreshTokenRoute = Router();
 DotEnv.config();
 
-refreshTokenRoute.get("/", async (req, res) => {
+refreshTokenRoute.get("/", async (req, res, next) => {
   /*
     1- get the refresh token
     2- check if the refresh token is expired then user must sign in again
@@ -39,42 +40,65 @@ refreshTokenRoute.get("/", async (req, res) => {
           return res.sendStatus(403);
         }
         const { data: username } = decode;
-        const hackedUser = await userService.getUserByUsername(username);
-        // if the hacked user is found then invalidate the user's refresh token
-        if (hackedUser) {
-          await signOutService.signOutUser(username);
+        try {
+          const hackedUser = await userService.getUserByUsername(username);
+          // if the hacked user is found then invalidate the user's refresh token
+          if (hackedUser) {
+            await signOutService.signOutUser(username);
+          }
+          return res.sendStatus(403);
+        } catch (err) {
+          const error = new AppError(
+            400,
+            "refresh token verify jwt for unknown user",
+            err.message
+          );
+          next(error);
         }
       }
     );
-    return res.sendStatus(403);
-  }
+    // return res.sendStatus(403);
+  } else {
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      async (err, decode) => {
+        if (err) {
+          return res.status(403).json({ error: "Invalid token" });
+        }
+        const { data } = decode;
+        const accessToken = jwt.sign(
+          { data },
+          process.env.ACCESS_TOKEN_SECRET,
+          {
+            expiresIn: "2m",
+          }
+        );
 
-  jwt.verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET,
-    async (err, decode) => {
-      if (err) {
-        return res.status(403).json({ error: "Invalid token" });
+        const newRefreshToken = jwt.sign(
+          { data },
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: "20m" }
+        );
+
+        try {
+          await userService.addRefreshToken(data, newRefreshToken);
+          res.cookie("refreshToken", newRefreshToken, {
+            httpOnly: true,
+            maxAge: 20 * 60 * 1000,
+          });
+          return res.status(201).json({ accessToken });
+        } catch (err) {
+          const error = new AppError(
+            400,
+            "refresh token creating new refresh token",
+            err.message
+          );
+          next(error);
+        }
       }
-      const { data } = decode;
-      const accessToken = jwt.sign({ data }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "5m",
-      });
-
-      const newRefreshToken = jwt.sign(
-        { data },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "20m" }
-      );
-
-      await userService.addRefreshToken(data, newRefreshToken);
-      res.cookie("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        maxAge: 20 * 60 * 1000,
-      });
-      return res.status(201).json({ accessToken });
-    }
-  );
+    );
+  }
 });
 
 export default refreshTokenRoute;
