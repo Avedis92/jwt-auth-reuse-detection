@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import * as DotEnv from "dotenv";
 import { userService } from "../services/userService.js";
+import { AppError } from "../shared/utils/error.js";
 
 DotEnv.config();
 
@@ -43,26 +44,26 @@ export const verifyIfUserAuthorized = async (req, res, next) => {
       //verify if the user was previously signed out before access token expiration.
       // This scenario is when user was signed out previously because of a refresh token reuse detection.
       //if so, then remove refresh token
-      const foundUser = await userService.getUserByUsername(username);
-      if (
-        refreshToken &&
-        foundUser &&
-        foundUser.is_loggedout &&
-        !foundUser.refresh_token
-      ) {
-        res.clearCookie("refreshToken", {
-          httpOnly: true,
-          maxAge: 20 * 60 * 1000,
-        });
-        return res.status(401).json({
-          error:
-            "You do not have authorization. You will be redirected shortly",
-          type: "SignedOutUserWithValidAccessToken",
-        });
+      try {
+        const foundUser = await userService.getUserByUsername(username);
+        if (foundUser && foundUser.is_loggedout && !foundUser.refresh_token) {
+          res.clearCookie("refreshToken", {
+            httpOnly: true,
+            maxAge: 20 * 60 * 1000,
+          });
+          return res.status(401).json({
+            error:
+              "You do not have authorization. You will be redirected shortly",
+            type: "SignedOutUserWithValidAccessToken",
+          });
+        }
+        // if the access token is not expired and no refresh
+        req.user = decode;
+        next();
+      } catch (err) {
+        const error = new AppError(400, "verifyIfUserAuthorized", err.message);
+        next(error);
       }
-      // if the access token is not expired and no refresh
-      req.user = decode;
-      next();
     }
   );
 };

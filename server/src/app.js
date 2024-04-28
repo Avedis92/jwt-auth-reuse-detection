@@ -20,6 +20,11 @@ app.use("/api/v1/signOut", signOutRoute);
 app.use("/api/v1/posts", authorizedRoute);
 app.use("/api/v1/refreshToken", refreshTokenRoute);
 
+app.use((error, req, res, next) => {
+  console.log(`${error.statusCode}: ${error.message}`);
+  return res.sendStatus(500);
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
