@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Field from "../../organisms/field";
 import { initialError, initialForm } from "./constants";
-import { allFieldsAreEmpty, validateForm } from "../../../shared/helper";
+import {
+  allFieldsAreEmpty,
+  validateForm,
+  createGoogleOAuthUrl,
+} from "../../../shared/helper";
 import { signInUser } from "../../../shared/fetch";
 import styles from "./style.module.css";
 
@@ -12,7 +16,7 @@ const SignIn = () => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-  const { container, messageContainer, submitButton } = styles;
+  const { container, messageContainer, submitButton, buttonContainer } = styles;
 
   const handleUsernameChange = (username: string) => {
     setSignInForm({
@@ -84,9 +88,14 @@ const SignIn = () => {
           value={signInForm.password}
           error={errorForm.passwordError}
         />
-        <button className={submitButton} onClick={handleSubmit}>
-          Sign In
-        </button>
+        <div className={buttonContainer}>
+          <button className={submitButton} onClick={handleSubmit}>
+            Sign In
+          </button>
+          <a className={submitButton} href={createGoogleOAuthUrl()}>
+            Sign In with Google
+          </a>
+        </div>
       </form>
       {message && (
         <div className={messageContainer}>
