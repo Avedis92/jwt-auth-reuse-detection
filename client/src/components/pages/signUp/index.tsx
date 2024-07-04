@@ -94,12 +94,11 @@ const SignUp = () => {
           Sign Up
         </button>
       </form>
-      {message && (
-        <div className={messageContainer}>
-          <p>{message}</p>
-          <button onClick={navigateToSignIn}>Go to signIn</button>
-        </div>
-      )}
+      {message && <p>{message}</p>}
+      <div className={messageContainer}>
+        <p>Got account?Sign in</p>
+        <button onClick={navigateToSignIn}>Go to signIn</button>
+      </div>
     </div>
   );
 };
