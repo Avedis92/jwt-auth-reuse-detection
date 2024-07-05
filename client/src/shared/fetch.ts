@@ -62,3 +62,17 @@ export const getNewTokens = (): Promise<{ accessToken: string }> => {
     (res) => res.json()
   );
 };
+
+export const getGoogleOAuthTokens = (
+  authCode: string
+): Promise<{ accessToken: string }> => {
+  const requestData: IRequestData = {
+    endpoints: endpoints.googleOauthTokens,
+    params: {
+      code: authCode,
+    },
+  };
+  return fetch(processUrl(requestData), processOptions(requestData)).then(
+    (res) => res.json()
+  );
+};

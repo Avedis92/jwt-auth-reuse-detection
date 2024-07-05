@@ -4,6 +4,7 @@ import * as DotEnv from "dotenv";
 import { userService } from "../services/userService.js";
 import { signOutService } from "../services/signOutService.js";
 import { AppError } from "../shared/utils/error.js";
+import { signNewAccessToken, signNewRefreshToken } from "../shared/helpers.js";
 
 const refreshTokenRoute = Router();
 DotEnv.config();
@@ -67,7 +68,7 @@ refreshTokenRoute.get("/", async (req, res, next) => {
           return res.status(403).json({ error: "Invalid token" });
         }
         const { data } = decode;
-        const accessToken = jwt.sign(
+        /* const accessToken = jwt.sign(
           { data },
           process.env.ACCESS_TOKEN_SECRET,
           {
@@ -79,7 +80,9 @@ refreshTokenRoute.get("/", async (req, res, next) => {
           { data },
           process.env.REFRESH_TOKEN_SECRET,
           { expiresIn: "20m" }
-        );
+        ); */
+        const accessToken = signNewAccessToken(data);
+        const newRefreshToken = signNewRefreshToken(data);
 
         try {
           await userService.addRefreshToken(data, newRefreshToken);
