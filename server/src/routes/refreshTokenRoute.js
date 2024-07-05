@@ -58,7 +58,6 @@ refreshTokenRoute.get("/", async (req, res, next) => {
         }
       }
     );
-    // return res.sendStatus(403);
   } else {
     jwt.verify(
       refreshToken,
@@ -68,19 +67,6 @@ refreshTokenRoute.get("/", async (req, res, next) => {
           return res.status(403).json({ error: "Invalid token" });
         }
         const { data } = decode;
-        /* const accessToken = jwt.sign(
-          { data },
-          process.env.ACCESS_TOKEN_SECRET,
-          {
-            expiresIn: "2m",
-          }
-        );
-
-        const newRefreshToken = jwt.sign(
-          { data },
-          process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "20m" }
-        ); */
         const accessToken = signNewAccessToken(data);
         const newRefreshToken = signNewRefreshToken(data);
 
