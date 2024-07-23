@@ -4,4 +4,5 @@ export const endpoints = {
   signOut: "/api/v1/signOut/",
   posts: "/api/v1/posts/",
   refreshToken: "/api/v1/refreshToken/",
+  googleOauthTokens: "/api/v1/oauth/google/",
 };

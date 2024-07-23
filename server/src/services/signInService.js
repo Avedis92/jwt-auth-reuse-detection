@@ -8,6 +8,13 @@ class SignInService {
     );
     return rows[0];
   }
+  async loginOAuthUser(username, refreshToken) {
+    const { rows } = await query(
+      'INSERT INTO "user" (username, refresh_token,is_loggedout) VALUES($1,$2,$3)',
+      [username, refreshToken, false]
+    );
+    return rows[0];
+  }
 }
 
 export const signInService = new SignInService();
